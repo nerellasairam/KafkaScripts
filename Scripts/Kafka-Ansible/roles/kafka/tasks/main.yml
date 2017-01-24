@@ -1,0 +1,123 @@
+- name: disable firewalld
+  become: yes
+  service: name=firewalld state=stopped enabled=no
+  ignore_errors: True  #when firewalld is stopped
+  tags: kafka
+
+- name: install tools
+  become: yes
+  yum: name="@Development tools" state=present
+  tags: kafka
+
+- name: create group
+  become: yes
+  group:
+    name: kafka
+    state: present
+  tags: kafka
+
+- name: create user
+  become: yes
+  user:
+    name: kafka
+    group: kafka
+  tags: kafka
+
+- name: Setting internal variable
+  become: yes
+  set_fact:
+    kafka_name: kafka_{{ kafka.scala_version }}-{{ kafka.version }}
+  tags: kafka
+
+- name: Setting internal variable
+  become: yes
+  set_fact:
+    kafka_dir: "{{ kafka.install_dir }}/{{ kafka_name }}"
+  tags: kafka
+
+- name: check if tar has been downloaded
+  become: yes
+  command: test -f /tmp/{{ kafka_name }}.tgz
+  register: kafka_tar_downloaded
+  failed_when: kafka_tar_downloaded.rc not in [0, 1]
+  changed_when: False
+  tags: kafka
+
+- name: Ensure Kafka tar is downloaded
+  become: yes
+  get_url:
+    url: "{{ kafka.mirror }}/kafka/{{ kafka.version }}/{{ kafka_name }}.tgz"
+    dest: /tmp
+  tags: kafka
+  when: kafka_tar_downloaded.rc == 1
+
+- name: Ensure tar is extracted
+  become: yes
+  command: tar xzf /tmp/{{ kafka_name }}.tgz chdir="{{ kafka.install_dir }}"
+  tags: kafka
+
+
+- name: Ensures data dir {{ kafka.data_dir }} exists
+  become: yes
+  file:
+    path: "{{ kafka.data_dir }}"
+    state: directory
+    owner: kafka
+    group: kafka
+  tags: kafka
+
+- name: Copy real config {{ zk_client_port }}
+  become: yes
+  template:
+    src: kafka-properties.j2
+    dest: "{{ kafka_dir }}/config/real-server.properties"
+  notify: restart kafka
+  tags: kafka
+
+- name: append broker id property
+  sudo : true
+  replace:
+    dest: "{{ kafka_dir }}/config/server.properties"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - { regexp: '#delete.topic.enable=true', replace: 'delete.topic.enable=true' }
+    - { regexp: 'broker.id=0', replace: 'broker.id={{broker_id}}' }
+    - { regexp: 'num.network.threads=3', replace: 'num.network.threads=8' }
+    - { regexp: 'socket.send.buffer.bytes=102400', replace: 'socket.send.buffer.bytes=1048576' }
+    - { regexp: 'socket.receive.buffer.bytes=102400', replace: 'socket.receive.buffer.bytes=1048576' }
+    - { regexp: 'socket.request.max.bytes=104857600', replace: 'socket.request.max.bytes=1048576' }
+    - { regexp: 'log.retention.hours=168', replace: 'log.retention.hours=24' }
+    - { regexp: 'num.recovery.threads.per.data.dir=1', replace: 'num.recovery.threads.per.data.dir=3' }
+    - { regexp: 'zookeeper.connection.timeout.ms=6000', replace: 'zookeeper.connection.timeout.ms=60000' }
+    - { regexp: 'zookeeper.connect=localhost:2181', replace: 'zookeeper.connect={{zooconnect}}' }
+
+- name: insert/update "Match User" configuration block in config
+  sudo: true
+  blockinfile:
+    dest: "{{ kafka_dir }}/config/server.properties"
+    block: |
+           default.replication.factor=3
+           log.cleaner.delete.retention.ms=300000
+           log.cleaner.threads=3
+           num.replica.fetchers=9
+           replica.fetch.max.bytes=1048576
+           replica.fetch.wait.max.ms=3000
+           replica.lag.time.max.ms=3000
+           replica.socket.receive.buffer.bytes=1048576
+           replica.socket.timeout.ms=60000
+           request.timeout.ms=33333
+           zookeeper.session.timeout.ms=60000
+           zookeeper.sync.time.ms=4000
+
+
+- name: systemd start script
+  become: yes
+  template:
+    src: kafka-systemd.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+    mode: 644
+  notify: start kafka
+  tags: kafka

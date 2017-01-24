@@ -1,0 +1,23 @@
+zk:
+  become: yes
+  version: 3.4.9
+  mirror: http://redrockdigimark.com/apachemirror
+  data_dir: /var/lib/zookeeper
+  install_dir: "/etc"
+  tick_time: 10000
+#zk_cluster_info: "{{ zk_cluster_info }}" 
+# If not using Vagrant,
+# Should be a list of node hostnames to node info
+# Example:
+
+#  zk-node-2:
+#    zk_id: 2
+#  zk-node-3:
+#    zk_id: 3
+zk_cluster_info:
+  192.168.0.157:
+    zk_id: 1
+  192.168.0.158:
+    zk_id: 2
+  192.168.0.156:
+    zk_id: 3

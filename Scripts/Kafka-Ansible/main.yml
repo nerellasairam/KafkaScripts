@@ -1,0 +1,17 @@
+---
+- hosts: all
+  remote_user: ec2-user
+  roles:
+    - java
+#    - { role: java, when: accept_oracle_licence }
+- hosts: zk
+  remote_user: ec2-user
+  roles:
+    - zookeeper
+- hosts: kafka
+  remote_user: ec2-user
+  roles:
+    - kafka
+  post_tasks:
+    - name: Transfer the script
+      copy: src=/home/invlab06/Documents/work/ServiceAssurance/Kafka-Launch/starttest.sh dest=/home/ec2-user mode=0777
