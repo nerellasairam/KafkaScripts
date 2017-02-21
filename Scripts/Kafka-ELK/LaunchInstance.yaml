@@ -1,0 +1,178 @@
+
+heat_template_version: 2013-05-23
+
+description: Deploy Kafka Cluster
+
+parameters:
+  keyname:
+    type: string
+    description: Key name for loggin in to instances
+    default: ubuntu-key
+  imagename:
+    type: string
+    description: Image name
+    default: CentOS-7
+
+resources:
+
+  floating_ip1:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: net04_ext
+
+  floating_ip2:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: net04_ext
+
+  floating_ip3:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: net04_ext
+
+  Kafka1:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: keyname }
+      image: { get_param: imagename }
+      flavor: m1.medium
+      name: Kafka1
+      networks:
+          - network: mgmt1
+
+
+  Kafka2:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: keyname }
+      image: { get_param: imagename }
+      flavor: m1.medium
+      name: Kafka2
+      networks:
+          - network: mgmt1
+
+  Kafka3:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: keyname }
+      image: { get_param: imagename }
+      flavor: m1.medium
+      name: Kafka3
+      networks:
+          - network: mgmt1
+
+
+  kafka1_floatingip:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floating_ip1 }
+      server_id: { get_resource: Kafka1 }
+
+  kafka2_floatingip:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floating_ip2 }
+      server_id: { get_resource: Kafka2 }
+
+  kafka3_floatingip:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floating_ip3 }
+      server_id: { get_resource: Kafka3 }
+
+
+  k1_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k1_attach_volume1:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k1_volume1 }
+      instance_uuid: { get_resource: Kafka1 }
+
+
+  k1_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k1_attach_volume2:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k1_volume2 }
+      instance_uuid: { get_resource: Kafka1 }
+
+  k2_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k2_attach_volume1:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k2_volume1 }
+      instance_uuid: { get_resource: Kafka2 }
+
+
+  k2_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k2_attach_volume2:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k2_volume2 }
+      instance_uuid: { get_resource: Kafka2 }
+
+
+  k3_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k3_attach_volume1:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k3_volume1 }
+      instance_uuid: { get_resource: Kafka3 }
+
+
+  k3_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: 1
+
+  k3_attach_volume2:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: k3_volume2 }
+      instance_uuid: { get_resource: Kafka3 }
+
+
+
+outputs:
+  instance_ip_kafka1:
+    description: The IP address of the deployed instance
+    value: { get_attr: [Kafka1, first_address] }
+
+  ip_kafka1:
+    description: The floating IP address assigned to the server.
+    value: { get_attr: [Kafka1, networks, mgmt1, 1] }
+
+  instance_ip_kafka2:
+    description: The IP address of the deployed instance
+    value: { get_attr: [Kafka2, first_address] }
+
+  ip_kafka2:
+    description: The floating IP address assigned to the server.
+    value: { get_attr: [Kafka2, networks, mgmt1, 1] }
+
+  instance_ip_kafka3:
+    description: The IP address of the deployed instance
+    value: { get_attr: [Kafka3, first_address] }
+  ip_kafka3:
+    description: The floating IP address assigned to the server.
+    value: { get_attr: [Kafka3, networks, mgmt1, 1] }
