@@ -1,0 +1,91 @@
+---
+- hosts: kafka-servers
+  remote_user: ec2-user
+  become: yes
+  become_method: sudo
+
+  tasks:
+
+    - name: Transfer the sanitytest script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ServiceAssurance/Kafka-Launch/starttest.sh dest=/home/ec2-user mode=0777
+
+    - name: Transfer the java rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/jdk-8u73-linux-x64.rpm  dest=/home/ec2-user/ mode=0755
+
+    - name: install java
+      become: yes
+      command: yum -y localinstall jdk-8u73-linux-x64.rpm
+
+    - name: Transfer the zookeeper scripts
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/zookeeper-3.4.6.tar.gz  dest=/home/ec2-user/ mode=0755
+
+    - name: install Zookeeper
+      become: yes
+      command: tar -xzf zookeeper-3.4.6.tar.gz
+
+    - name: Change zoo.cfg
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/zoo.cfg  dest=/home/ec2-user/zookeeper-3.4.6/conf/ mode=0755
+
+    - name: start zookeeper
+      become: yes
+      command: sudo /home/ec2-user/zookeeper-3.4.6/bin/zkServer.sh start
+
+    - name: my id
+      shell: echo {{broker_id}} > myid
+      args:
+        chdir: /tmp/zookeeper/
+        creates: myid
+
+    - name: Change zoo.cfg
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/zoo.cfg  dest=/home/ec2-user/zookeeper-3.4.6/conf/ mode=0755
+
+    - name: start zookeeper
+      become: yes
+      command: sudo /home/ec2-user/zookeeper-3.4.6/bin/zkServer.sh restart
+
+    - name: Transfer the kafka zip
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/kafka_2.11-0.10.1.0.tgz  dest=/home/ec2-user/ mode=0755
+
+    - name: install kafka
+      become: yes
+      command: tar -xzf kafka_2.11-0.10.1.0.tgz
+
+    - name: kibana config
+      sudo : true
+      replace:
+        dest: "/home/ec2-user/kafka_2.11-0.10.1.0/config/server.properties"
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      with_items:
+        - { regexp: '#delete.topic.enable=true', replace: 'delete.topic.enable=true' }
+        - { regexp: 'zookeeper.connect=localhost:2181', replace: 'zookeeper.connect={{private_ip1}}:2181,{{private_ip2}}:2181,{{private_ip3}}:2181' }
+        - { regexp: 'broker.id=0', replace: 'broker.id={{ broker_id }}' }
+        - { regexp: 'zookeeper.connection.timeout.ms=6000', replace: 'zookeeper.connection.timeout.ms=60000' }
+        - { regexp: '#advertised.listeners=PLAINTEXT://your.host.name:9092', replace: '#advertised.listeners=PLAINTEXT://{{host_name}}:9092' }
+        - { regexp: 'num.network.threads=3', replace: 'num.network.threads=8' }
+        - { regexp: 'log.retention.hours=168', replace: 'log.retention.hours=24' }
+        - { regexp: 'num.recovery.threads.per.data.dir=1', replace: 'num.recovery.threads.per.data.dir=3' }
+
+    - name: Transfer the http script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/enablehttp.sh dest=/home/ec2-user/ mode=0755
+
+    - name: enable http
+      become: yes
+      shell: /home/ec2-user/enablehttp.sh
+
+    - name: copy start kafka
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/startKafka.sh dest=/home/ec2-user/ mode=0755
+
+    - name: start kafka
+      become: yes
+      shell: /home/ec2-user/startKafka.sh
+      ignore_errors: yes
+
