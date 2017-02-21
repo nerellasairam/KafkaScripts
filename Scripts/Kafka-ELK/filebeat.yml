@@ -1,0 +1,38 @@
+---
+- hosts: kafka-servers
+  remote_user: ec2-user
+  become: yes
+  become_method: sudo
+
+
+  tasks:
+
+
+    - name: Transfer the filebeat rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/filebeat-5.2.1-x86_64.rpm  dest=/home/ec2-user/ mode=0755
+
+    - name: change directory
+      become: yes
+      command: cd ~
+
+    - name: install filebeat
+      become: yes
+      command: yum -y localinstall filebeat-5.2.1-x86_64.rpm
+
+    - name: enable service filebeat
+      become: yes
+      command: systemctl enable filebeat.service
+
+    - name: Transfer the filebeat.yml
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/filebeat.yml  dest=/etc/filebeat/filebeat.yml mode=0755
+
+    - name: Transfer the ssl certificate
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/logstash-forwarder.crt  dest=/etc/pki/tls/certs/logstash-forwarder.crt mode=0755
+
+    - name: start filebeat
+      become: yes
+      command: systemctl start filebeat.service
+
