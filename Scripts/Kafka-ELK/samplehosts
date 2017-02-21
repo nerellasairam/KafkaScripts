@@ -1,0 +1,6 @@
+[kafka-servers]
+192.168.1.209 broker_id=1 private_ip1=12.12.12.216 private_ip2=12.12.12.217 private_ip3=12.12.12.215 host_name=kafka1
+192.168.1.211 broker_id=2 private_ip1=12.12.12.216 private_ip2=12.12.12.217 private_ip3=12.12.12.215 host_name=kafka2
+192.168.1.210 broker_id=3 private_ip1=12.12.12.216 private_ip2=12.12.12.217 private_ip3=12.12.12.215 host_name=kafka3
+[elk-servers]
+192.168.1.213 privateip=12.12.12.218
