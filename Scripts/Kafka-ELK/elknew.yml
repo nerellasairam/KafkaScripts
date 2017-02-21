@@ -1,0 +1,157 @@
+---
+- hosts: elk-servers
+  remote_user: ec2-user
+  become: yes
+  become_method: sudo
+
+
+  tasks:
+
+    - name: install wget
+      become: yes
+      yum: name=wget state=present
+      tags: java8
+
+    - name: Transfer the java rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/jdk-8u73-linux-x64.rpm  dest=/home/ec2-user/ mode=0755
+
+    - name: install java
+      become: yes
+      command: yum -y localinstall jdk-8u73-linux-x64.rpm
+
+    - name: start with package key import
+      become: yes
+      command: rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
+
+    - name: Transfer the elastic rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/elasticsearch-5.2.0.rpm  dest=/home/ec2-user/ mode=0755
+
+    - name: install ElasticSearch
+      become: yes
+      command: rpm --install elasticsearch-5.2.0.rpm
+
+    - name: enable service ElasticSearch
+      become: yes
+      command: systemctl enable elasticsearch.service
+
+    - name: start ElasticSearch
+      become: yes
+      command: systemctl start elasticsearch.service
+
+    - name: start ElasticSearch
+      become: yes
+      command: systemctl start elasticsearch.service
+
+    - name: Transfer the kibana rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/kibana-5.2.0-x86_64.rpm  dest=/home/ec2-user/ mode=0755
+
+    - name: install kibana
+      become: yes
+      command: rpm --install kibana-5.2.0-x86_64.rpm
+
+    - name: enable service kibana
+      become: yes
+      command: systemctl enable kibana.service
+    - name: kibana config
+      sudo : true
+      replace:
+        dest: "/etc/kibana/kibana.yml"
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      with_items:
+        - { regexp: '#server.host:"localhost"', replace: 'server.host:"{{privateip}}"' }
+        - { regexp: '#server.host: "localhost"', replace: 'server.host: "{{privateip}}"' }
+        - { regexp: '#server.port: 5601', replace: 'server.port: 5601' }
+
+    - name: start Kibana
+      become: yes
+      command: systemctl start kibana.service
+
+    - name: wget epel Nginx
+      become: yes
+      command: yum -y install epel-release
+
+    - name: wget Nginx
+      become: yes
+      command: yum -y install nginx httpd-tools
+
+    - name: Transfer the kibana script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/kibana.conf  dest=/etc/nginx/conf.d/ mode=0755
+
+    - name: Transfer the nginx script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/nginx.conf  dest=/etc/nginx/ mode=0755
+
+    - name: Transfer the http script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/enablehttpelk.sh dest=/tmp/ mode=0755
+
+    - name: enable http
+      become: yes
+      shell: /tmp/enablehttpelk.sh
+
+    - name: enable service Nginx
+      become: yes
+      command:  systemctl start nginx
+
+    - name: start Nginx
+      become: yes
+      command:  systemctl enable nginx
+
+
+    - name: Transfer the Logstash rpm
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/logstash-5.2.0.rpm dest=/home/ec2-user/ mode=0755
+
+    - name: install Logstash
+      become: yes
+      shell: rpm --install logstash-5.2.0.rpm
+    - name: Copy input cfg
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/input.conf  dest=/etc/logstash/conf.d/input.conf mode=0755
+
+    - name: Copy output cfg
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/output.conf  dest=/etc/logstash/conf.d/output.conf mode=0755
+
+    - name: Copy filter cfg
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/filter.conf  dest=/etc/logstash/conf.d/filter.conf mode=0755
+
+    - name: Transfer the ssl cert script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/sslelk.sh dest=/tmp/ mode=0755
+
+    - name: enable ssl
+      become: yes
+      shell: /tmp/sslelk.sh
+
+    - fetch:
+        src: /etc/pki/tls/certs/logstash-forwarder.crt
+        dest: /home/invlab06/Documents/work/ansible/kafka-cluster/scripts/
+        flat: yes
+
+    - name: enable service logstash
+      become: yes
+      command:  systemctl start logstash
+
+    - name: start logstash
+      become: yes
+      command:  systemctl enable logstash
+
+    - name: Transfer the kibanadashborad script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/beats-dashboards-1.1.0.zip dest=/home/ec2-user/ mode=0755
+
+    - name: Transfer the kibanadashborad script
+      become: yes
+      copy: src=/home/invlab06/Documents/work/ansible/kafka-cluster/scripts/kibanadb.sh dest=/home/ec2-user/ mode=0755
+
+    - name: configure kibana dashboard
+      become: yes
+      shell: /home/ec2-user/kibanadb.sh
+
