@@ -1,0 +1,49 @@
+
+heat_template_version: 2013-05-23
+
+description: Deploy ELK
+
+parameters:
+  keyname:
+    type: string
+    description: Key name for loggin in to instances
+    default: ubuntu-key
+  imagename:
+    type: string
+    description: Image name
+    default: CentOS-7
+
+resources:
+
+  floating_ip1:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: net04_ext
+
+  ELK-STACK:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: keyname }
+      image: { get_param: imagename }
+      flavor: m1.medium
+      name: ELK-STACK
+      networks:
+          - network: mgmt1
+
+
+  k1_floatingip:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floating_ip1 }
+      server_id: { get_resource: ELK-STACK }
+
+
+
+outputs:
+  instance_ip_k1:
+    description: The IP address of the deployed instance
+    value: { get_attr: [ELK-STACK, first_address] }
+
+  ip_k1:
+    description: The floating IP address assigned to the server.
+    value: { get_attr: [ELK-STACK, networks, mgmt1, 1] }
