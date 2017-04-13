@@ -7,3 +7,5 @@ https://verizon2.webex.com/verizon2/e.php?MTID=m148dfb93d57bc34d69bcd1b4a27bf7e5
 
 http://www.mymeetings.com/nc/join.php?sigKey=mymeetings&i=748005768&p=&t=c
 
+https://verizon2.webex.com/mw3000/mywebex/default.do?service=1&main_url=%2Fmc3000%2Fe.do%3Fsiteurl%3Dverizon2-en%26AT%3DMI%26EventID%3D556505672%26MTID%3Dmba85c0382effc1cc870033db702d597c%26Host%3DQUhTSwAAAANAx_k7u6xTnI1HKB871s-_T_Xhm8ioToRpH47ccQAh5IEM5h1tJkx4xCmUz2z420rE0oUHeJZnI1Sw_o90siwO0%26FrameSet%3D2&siteurl=verizon2-en&nomenu=true
+
