@@ -1,0 +1,45 @@
+
+
+{"Inventory":{"networkServices":[{"vnfd":{"sourceId":"PKG-12888","vimZoneName":"TAMPFL00_USERSTACK_VES_1","vnfName":"vSmart.test.net","vnfType":"Controller","vnfVendorVersion":1,"tenantName":"ECM","sourceType":"HOT
+Package","vimZoneType":"OPENSTACK","provisioningStatus":"ACTIVE","vdcName":"Tampa
+VDC","vnfid":"VAPP-12892","vnfVendor":"Viptela","vdcId":"VDC-5645"},"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Viptela","name":"vSmart_test","description":"Viptela
+vSmart","vdcName":"Tampa VDC","id":"NS-12896","type":"SD-WAN","version":1,"vdcId":"VDC-5645","vld":{"internalCpd":[{"address":"192.168.10.7:80","tenantName":"ECM","addressType":"OAM_IP","provisioningStatus":"ACTIVE","name":"Viptela_CP_01","description":"OAM
+Access CP for Configuration over CLI","vdcName":"Tampa
+VDC","id":"CP-12897","type":"OAM","category":"Service","vdcId":"VDC-5645"},{"address":"192.168.0.123","tenantName":"ECM","addressType":"VIP","provisioningStatus":"ACTIVE","name":"PA_HQBranch-a_TestEssentialCP_02","description":"CP
+at Customer's premises","vdcName":"Tampa
+VDC","id":"CP-12898","type":"Customer-Endpoin","category":"Service","vdcId":"VDC-5645"}],"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Verizon","name":"VLink_BranchPATestEssentialCP1","description":"VLINK
+connecting branch between CP01 and CP02","vdcName":"Tampa
+VDC","id":"VL-12899","type":"VLAN","version":1,"vdcId":"VDC-5645"}},{"vnfd":{"sourceId":"PKG-12799","vimZoneName":"TAMPFL00_USERSTACK_VES_1","vnfName":"vManage.test.net","vnfType":"Controller","vnfVendorVersion":1,"tenantName":"ECM","sourceType":"HOT
+Package","vimZoneType":"OPENSTACK","provisioningStatus":"ACTIVE","vdcName":"Tampa
+VDC","vnfid":"VAPP-12921","vnfVendor":"Viptela","vdcId":"VDC-5645"},"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Viptela","name":"vManage_test","description":"Viptela
+vManage Controller","vdcName":"Tampa
+VDC","id":"NS-12926","type":"SD-WAN","version":1,"vdcId":"VDC-5645","vld":{"internalCpd":[{"address":"192.168.10.5:80","tenantName":"ECM","addressType":"OAM_IP","provisioningStatus":"ACTIVE","name":"Viptela_CP_01","description":"OAM
+Access CP for Configuration over CLI","vdcName":"Tampa
+VDC","id":"CP-12927","type":"OAM","category":"Service","vdcId":"VDC-5645"},{"address":"192.168.0.123","tenantName":"ECM","addressType":"VIP","provisioningStatus":"ACTIVE","name":"PA_HQBranch-a_TestEssentialCP_02","description":"CP
+at Customer's premises","vdcName":"Tampa
+VDC","id":"CP-12928","type":"Customer-Endpoin","category":"Service","vdcId":"VDC-5645"}],"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Verizon","name":"VLink_BranchPATestEssentialCP1","description":"VLINK
+connecting branch between CP01 and CP02","vdcName":"Tampa
+VDC","id":"VL-12929","type":"VLAN","version":1,"vdcId":"VDC-5645"}},{"vnfd":{"sourceId":"PKG-12933","vimZoneName":"TAMPFL00_USERSTACK_VES_1","vnfName":"vBond.test.net","vnfType":"Controller","vnfVendorVersion":1,"tenantName":"ECM","sourceType":"HOT
+Package","vimZoneType":"OPENSTACK","provisioningStatus":"ACTIVE","vdcName":"Tampa
+VDC","vnfid":"VAPP-12943","vnfVendor":"Viptela","vdcId":"VDC-5645"},"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Viptela","name":"vBond_test","description":"Viptela
+vBond","vdcName":"Tampa
+VDC","id":"NS-12947","type":"SD-WAN","version":1,"vdcId":"VDC-5645","vld":{"internalCpd":[{"address":"192.168.10.6:80","tenantName":"ECM","addressType":"OAM_IP","provisioningStatus":"ACTIVE","name":"Viptela_CP_01","description":"OAM
+Access CP for Configuration over CLI","vdcName":"Tampa
+VDC","id":"CP-12948","type":"OAM","category":"Service","vdcId":"VDC-5645"},{"address":"192.168.0.123","tenantName":"ECM","addressType":"VIP","provisioningStatus":"ACTIVE","name":"PA_HQBranch-a_TestEssentialCP_02","description":"CP
+at Customer's premises","vdcName":"Tampa
+VDC","id":"CP-12949","type":"Customer-Endpoin","category":"Service","vdcId":"VDC-5645"}],"tenantName":"ECM","provisioningStatus":"ACTIVE","vendor":"Verizon","name":"VLink_BranchPATestEssentialCP1","description":"VLINK
+connecting branch between CP01 and CP02","vdcName":"Tampa
+VDC","id":"VL-12950","type":"VLAN","version":1,"vdcId":"VDC-5645"}},{"vnfd":{"sourceId":"PKG-13176","vimZoneName":"TAMPFL00_USERSTACK_VES_1","vnfName":"Fortinet.ecm.Net","vnfType":"FW","vnfVendorVersion":1,"tenantName":"ECM","sourceType":"HOT
+Package","vimZoneType":"OPENSTACK","provisioningStatus":"ACTIVE","vdcName":"Tampa
+VDC","vnfid":"VAPP-13256","vnfVendor":"Fortinet","vdcId":"VDC-5645"},"tenantName":"ECM","provisioningStatus":"PENDING_DELETE","vendor":"Fortinet","name":"Fortinet-Hosted-Security-51004069","description":"Hosted
+Security with Fortinet FW","vdcName":"Tampa
+VDC","id":"NS-13262","type":"Security","version":1,"vdcId":"VDC-5645","vld":{"internalCpd":[{"address":"96.239.204.54","tenantName":"ECM","addressType":"OAM_IP","provisioningStatus":"PENDING_DELETE","name":"Tampa_Fortinet_CP_02","description":"OAM
+Access CP for Configuration over CLI","vdcName":"Tampa
+VDC","id":"CP-13263","type":"OMA","category":"Service","vdcId":"VDC-5645"},{"address":"96.239.204.54","tenantName":"ECM","addressType":"VIP","*
+Connection #0 to host 10.75.14.202 left intact
+
+provisioningStatus":"PENDING_DELETE","name":"HQBranch-a","description":"CP
+at Customer's premises","vdcName":"Tampa
+VDC","id":"CP-13264","type":"Customer-Endpoin","category":"Service","vdcId":"VDC-5645"}],"tenantName":"ECM","provisioningStatus":"PENDING_DELETE","vendor":"Verizon","name":"VLink_Branch1_DC1","description":"VLINK
+Connecting Branch to DC","vdcName":"Tampa
+VDC","id":"VL-13265","type":"VLAN","version":0,"vdcId":"VDC-5645"}}]}}
