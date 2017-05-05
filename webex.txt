@@ -30,5 +30,13 @@ http://www.mymeetings.com/nc/join.php?sigKey=mymeetings&i=748005768&p=&t=c
 /bin/kafka-console-consumer --topic yahoomanager --zookeeper kafka1:2181 --from-beginning
 
 
+Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		WebTarget webTarget = client.target(urltoCall);
+
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON).property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, "topo")
+			      .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, "topo!");
+		Response response = invocationBuilder.get();
 
 
