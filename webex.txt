@@ -15,7 +15,7 @@ vijaycall
 
 http://www.mymeetings.com/nc/join.php?sigKey=mymeetings&i=748005768&p=&t=c
 
-
+).header("Authorization", "Basic dG9wbzp0b3BvIQ==").
 
 
  
