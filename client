@@ -1,0 +1,203 @@
+package org.apache.kafka.connect.apigw;
+
+
+ import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.filter.LoggingFilter;
+
+public class JerseyClientGet {
+
+	static {
+		HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+			public boolean verify(String hostname, SSLSession session) {
+				// ip address of the service URL(like.23.28.244.244)
+				if (hostname.equals("192.168.0.3"))
+					return true;
+				return false;
+			}
+		});
+	}
+
+	
+	public static void main(String[] args){
+	  
+	  String newLine = System.getProperty("line.separator");
+	  
+	  BufferedReader  reader = new BufferedReader(new InputStreamReader(callRestUrl("http://localhost:8080/uop/getInventory"), StandardCharsets.UTF_8)); 
+	  
+	  StringBuilder result = new StringBuilder();
+	  
+	  String line; 
+	  
+	  System.out.println(reader.toString());
+	  boolean flag = false; 
+	  
+	  try { 
+		  
+		  while ((line = reader.readLine()) != null) 
+		  
+		  { 
+			  
+			  result.append(flag? newLine:"").append(line);
+			  
+			  flag = true; }
+		  
+		  System.out.println(result);
+		  
+	  } 
+	  
+	  catch (IOException e) {  }
+	  //postRestUrl("http://192.168.1.43:8082/topics/gwtopic", "output");
+	  
+	  }
+
+
+	public static   InputStream callRestUrl(String urltoCall) {
+
+		Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		WebTarget webTarget = client.target(urltoCall);
+
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON).property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, "topo")
+			      .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, "topo!");
+		Response response = invocationBuilder.get();
+
+		return response.readEntity(InputStream.class);
+
+	}
+	public static   InputStream mockcallRestUrl(String urltoCall) {
+
+		Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		WebTarget webTarget = client.target(urltoCall);
+
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON) ;
+		Response response = invocationBuilder.get();
+
+		return response.readEntity(InputStream.class);
+
+	}
+	public    InputStream callRestUrlwithToken(String urltoCall, String token) {
+		
+		
+		Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		  
+		System.out.println(urltoCall);
+		
+		WebTarget webTarget = client.target(urltoCall);
+
+		
+		
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON).header("X-Auth-Token",
+						token);
+		Response response = invocationBuilder.get();
+
+		return response.readEntity(InputStream.class);
+
+	}
+	
+	public    void callRestSinkTask(Object value) {
+		
+		
+
+		Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		WebTarget webTarget = client.target(value.toString());
+
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON) ;
+		Response response = invocationBuilder.get();
+
+		postontopic( response.readEntity(InputStream.class));
+
+	}
+	
+	
+public    void postontopic(InputStream value ) {
+		
+		
+
+		Client client = ClientBuilder.newClient(new ClientConfig()
+				.register(LoggingFilter.class));
+		WebTarget webTarget = client.target("http://kafka1:8082/topics/jsonresponse");
+
+		Invocation.Builder invocationBuilder = webTarget.request(
+				MediaType.APPLICATION_JSON).header("Content-Type","application/vnd.kafka.json.v1+json");  
+		Response response = invocationBuilder.post(Entity.entity(value, MediaType.APPLICATION_JSON));
+
+		  response.readEntity(InputStream.class);
+
+	}
+	
+
+public   InputStream callRestRelayUrl(String urltoCall) {
+
+	Client client = ClientBuilder.newClient(new ClientConfig()
+			.register(LoggingFilter.class));
+	WebTarget webTarget = client.target(urltoCall);
+
+	Invocation.Builder invocationBuilder = webTarget.request(
+			MediaType.APPLICATION_JSON).header("Content-Type","application/vnd.kafka.avro.v1+json"); 
+	Response response = invocationBuilder.get();
+
+	
+         String newLine = System.getProperty("line.separator");
+	  
+	  BufferedReader  reader = new BufferedReader(new InputStreamReader(response.readEntity(InputStream.class))); 
+	  
+	  StringBuilder result = new StringBuilder();
+	  
+	  String line; 
+	  
+	  System.out.println(reader.toString());
+	 
+	  
+	  try { 
+		  
+		  while ((line = reader.readLine()) != null) 
+		  
+		  { 
+			  
+			  result.append(line);
+			  
+		 }
+		  
+		  System.out.println(result);
+		  
+	  } 
+	  
+	  catch (IOException e) {  }
+	  
+	  
+	  
+	return callRestUrl(result.toString());
+	
+	
+
+}
+
+
+
+
+}
