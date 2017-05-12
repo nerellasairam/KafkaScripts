@@ -17,7 +17,9 @@ http://www.mymeetings.com/nc/join.php?sigKey=mymeetings&i=748005768&p=&t=c
 
 ).header("Authorization", "Basic dG9wbzp0b3BvIQ==").
 
-
+/bin/kafka-topics --zookeeper localhost:2181 --create --topic demogw --partitions 1 --replication-factor 3
+/bin/kafka-console-producer --broker-list localhost:9092 --topic test 
+/bin/kafka-console-consumer --topic gwtopic --zookeeper kafka1:2181 --from-beginning
  
   josy
   http://www.mymeetings.com/nc/join.php?i=746187791&p=8139782041&t=c
