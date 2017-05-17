@@ -42,3 +42,7 @@ Client client = ClientBuilder.newClient(new ClientConfig()
 		Response response = invocationBuilder.get();
 
 
+
+http://www.mymeetings.com/nc/join.php?i=746291558&p=&t=c
+
+
