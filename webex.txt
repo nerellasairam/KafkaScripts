@@ -16,3 +16,118 @@ https://verizon.webex.com/verizon/e.php?MTID=mc7068f1fd979f989499546a0044a1c2e
 
 
 https://e-meetings.verizonbusiness.com/global/en/index.php?customHeader=emeetings
+
+
+[
+  {
+    "hostname": "northstar-cyril",
+    "status": "Up",
+    "role": "Standby,Coordinator",
+    "version": "2.1.0-20161014_200850_68146_458.x86_64",
+    "processes": [
+      {
+        "processId": "3067",
+        "processName": "toposerver",
+        "startTime": "2016-11-04T14:50:20.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "3707",
+        "processName": "junosvm",
+        "startTime": "2016-11-04T14:55:31.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2195",
+        "processName": "zookeeper",
+        "startTime": "2016-11-04T14:47:19.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2194",
+        "processName": "cassandra",
+        "startTime": "2016-11-04T14:47:19.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2197",
+        "processName": "ha_agent",
+        "startTime": "2016-11-04T14:47:19.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "3066",
+        "processName": "npat",
+        "startTime": "2016-11-04T14:50:20.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2192",
+        "processName": "listener1_00",
+        "startTime": "2016-11-04T14:47:17.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2994",
+        "processName": "pcserver",
+        "startTime": "2016-11-04T14:50:10.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2962",
+        "processName": "pceserver",
+        "startTime": "2016-11-04T14:50:00.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "31441",
+        "processName": "nodejs",
+        "startTime": "2016-11-15T20:40:00.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "2196",
+        "processName": "rabbitmq",
+        "startTime": "2016-11-04T14:47:19.000Z",
+        "role": "Standby"
+      },
+      {
+        "processId": "3108",
+        "processName": "mladapter",
+        "startTime": "2016-11-04T14:50:31.000Z",
+        "role": "Standby"
+      }
+    ]
+  }
+]
+
+--------
+
+[
+  {
+    "component": "PCE",
+    "status": "PCE is up.",
+    "statusTimestamp": 1478271011652,
+    "statusTimestampTime": "2016-11-04T14:50:11.652Z"
+  },
+  {
+    "component": "Topology acquisition",
+    "status": "Connected to NTAD: 172.16.16.2 port: 450",
+    "statusTimestamp": 1478271612812,
+    "statusTimestampTime": "2016-11-04T15:00:12.812Z"
+  },
+  {
+    "component": "Path Computation Server",
+    "status": "Active Path Stat: 30 up 4 down 0 detoured 0 being provisioned. Link Stat: 11 up 0 down. Node Stat: 7 active nodes, 4 PCC nodes",
+    "statusTimestamp": 1479585318793,
+    "statusTimestampTime": "2016-11-19T19:55:18.793Z"
+  },
+  {
+    "component": "Transport Topology acquisition",
+    "status": "Up",
+    "childs": [],
+    "statusTimestamp": 1479585363416,
+    "statusTimestampTime": "2016-11-19T19:56:03.416Z"
+  }
+]
+
