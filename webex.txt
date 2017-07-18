@@ -152,3 +152,91 @@ sudo snmptrap -v 2c -c public localhost:10161 "" NET-SNMP-EXAMPLES-MIB::netSnmpE
   }
 ]
 
+------
+
+
+{"versanms.sdwan-template-workflow":{
+   "templateName":"Macy2-Post-Staging",
+   "templateType":"sdwan-post-staging",
+   "controllers":[
+      "versa-controller-vnsp"
+   ],
+   "providerOrg":{
+      "name":"Macy2",
+      "statefulFW":false,
+      "nextGenFW":true
+   },
+   "analyticsCluster":"versa-cluster-vnsp1",
+   "deviceFirmfactor":"3",
+   "wanInterfaces":[
+      {
+         "interfaceName":"vni-0/0",
+         "unitInfo":[
+            {
+               "subUnit":0,
+               "vlanId":0,
+               "networkName":"INTERNET1",
+               "ipv4Static":false,
+               "ipv4Dhcp":true,
+               "ipv6Static":false,
+               "ipv6Dhcp":false,
+               "transportDomains":[
+                  "INTERNET"
+               ]
+            }
+         ]
+      },
+      {
+         "interfaceName":"vni-0/1",
+         "unitInfo":[
+            {
+               "subUnit":0,
+               "vlanId":0,
+               "networkName":"MPLS",
+               "ipv4Static":false,
+               "ipv4Dhcp":true,
+               "ipv6Static":false,
+               "ipv6Dhcp":false,
+               "transportDomains":[
+                  "MPLS"
+               ]
+            }
+         ]
+      }
+   ],
+   "deviceType":"full-mesh",
+   "redundantPair":{
+      "enable":false
+   },
+   "lanInterfaces":[
+      {
+         "interfaceName":"vni-0/4",
+         "unitInfo":[
+            {
+               "subUnit":0,
+               "vlanId":0,
+               "networkName":"LAN",
+               "subOrganization":"Macy2",
+               "ipv4Static":true,
+               "ipv4Dhcp":false,
+               "ip6Static":false,
+               "ipv6Dhcp":false,
+               "vrfName":"Macy2-LAN-VR"
+            }
+         ]
+      }
+   ],
+   "solutionTier":"advanced-sdwan-plus-utm",
+   "bandwidth":1000,
+   "isAnalyticsEnabled":true,
+   "isPrimary":true,
+   "diaConfig":{
+      "loadBalance":false
+   },
+   "custom-param":[
+
+   ],
+   "splitTunnels":[
+
+   ]
+}}
